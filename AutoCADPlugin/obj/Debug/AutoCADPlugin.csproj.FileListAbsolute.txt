@@ -1,0 +1,6 @@
+F:\work\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.dll
+F:\work\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.pdb
+F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csprojAssemblyReference.cache
+F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csproj.CoreCompileInputs.cache
+F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.dll
+F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.pdb
