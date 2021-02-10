@@ -4,3 +4,9 @@ F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csprojAssemblyRefere
 F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csproj.CoreCompileInputs.cache
 F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.dll
 F:\work\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.pdb
+F:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.dll
+F:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.pdb
+F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csprojAssemblyReference.cache
+F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csproj.CoreCompileInputs.cache
+F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.dll
+F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.pdb

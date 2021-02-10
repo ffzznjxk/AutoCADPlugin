@@ -1,4 +1,5 @@
 ﻿using Autodesk.AutoCAD.DatabaseServices;
+using Autodesk.AutoCAD.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AutoCADPlugin
 {
-    class EntityTools
+    static class EntityTools
     {
         /// <summary>
         /// 添加实体
@@ -15,7 +16,7 @@ namespace AutoCADPlugin
         /// <param name="db">图形数据库</param>
         /// <param name="entity">实体</param>
         /// <returns>对象Id</returns>
-        public static ObjectId AddNewEntity(Database db, Entity entity)
+        public static ObjectId AddNewEntity(this Database db, Entity entity)
         {
             //开启事务处理
             Transaction tr = db.TransactionManager.StartTransaction();
@@ -38,14 +39,29 @@ namespace AutoCADPlugin
         /// <param name="db">图形数据库</param>
         /// <param name="entitys">多个实体</param>
         /// <returns>对象Id</returns>
-        public static ObjectId[] AddNewEntity(Database db, params Entity[] entitys)
+        public static ObjectId[] AddNewEntity(this Database db, params Entity[] entitys)
         {
             ObjectId[] ids = new ObjectId[entitys.Length];
             for (int i = 0; i < entitys.Length; i++)
             {
-                ids[i] = AddNewEntity(db, entitys[i]);
+                ids[i] = db.AddNewEntity(entitys[i]);
             }
             return ids;
+        }
+
+        public static ObjectId AddNewPolyLine(this Database db, List<Point3d> pts, bool isClosed = true)
+        {
+            Polyline pl = new Polyline();
+            for (int i = 0; i < pts.Count; i++)
+            {
+                Point3d pt = pts[i];
+                pl.AddVertexAt(i, new Point2d(pt.X, pt.Y), 0, 0, 0);
+
+            }
+            pl.Closed = isClosed;
+
+
+            return EntityTools.AddNewEntity(db, pl);
         }
     }
 }

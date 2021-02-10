@@ -5,9 +5,6 @@ using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AutoCADPlugin
 {
@@ -106,21 +103,145 @@ namespace AutoCADPlugin
             if (pts.Count > 1)
             {
 
-                Polyline pl = new Polyline();
-                for (int i = 0; i < pts.Count; i++)
-                {
-                    Point3d pt = pts[i];
-                    pl.AddVertexAt(i, new Point2d(pt.X, pt.Y), 0, 0, 0);
-                }
-                pl.Closed = true;
-
                 Database db = HostApplicationServices.WorkingDatabase;
-                var id = EntityTools.AddNewEntity(db, pl);
+                db.AddNewPolyLine(pts);
             }
             else
             {
                 ed.WriteMessage("\n输入点过少。");
             }
+        }
+
+        [CommandMethod("DPL")]
+        public void DrawParallelogram()
+        {
+
+            Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+
+            var peo = new PromptEntityOptions("\n选择一条直线");
+            peo.SetRejectMessage("选择直线");
+            peo.AddAllowedClass(typeof(Line), true);
+
+            PromptEntityResult per = ed.GetEntity(peo);
+            if (per.Status == PromptStatus.OK)
+            {
+                var ppr = ed.GetPoint(new PromptPointOptions("\n指定点"));
+                if (ppr.Status == PromptStatus.OK)
+                {
+                    var pt3 = ppr.Value;
+                    var id = per.ObjectId;
+                    Database db = HostApplicationServices.WorkingDatabase;
+                    using (var tr = db.TransactionManager.StartTransaction())
+                    {
+                        var ent = (Entity)id.GetObject(OpenMode.ForRead);
+                        Line line = (Line)ent;
+                        //var vector = line.EndPoint - line.StartPoint;
+                        var vector = line.Delta;
+
+                        var pt4 = pt3 - vector;
+
+                        List<Point3d> pts = new List<Point3d>()
+                        {
+                            line.StartPoint, line.EndPoint, pt3, pt4
+                        };
+
+                        db.AddNewPolyLine(pts);
+
+                        line.UpgradeOpen();
+                        line.Erase();
+
+                        tr.Commit();
+                    }
+                }
+
+            }
+        }
+
+        [CommandMethod("DREC")]
+        public void DrawRectangle()
+        {
+            Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+            PromptPointOptions ppo = new PromptPointOptions("\n指定起点");
+            PromptPointResult ppr = ed.GetPoint(ppo);
+            if (ppr.Status == PromptStatus.OK)
+            {
+                Point3d ptStart = ppr.Value;
+                var pcr = ed.GetCorner("\n指定角点", ptStart);
+                if (pcr.Status == PromptStatus.OK)
+                {
+                    Point3d ptEnd = pcr.Value;
+
+                    var maxX = Math.Max(ptStart.X, ptEnd.X);
+                    var maxY = Math.Max(ptStart.Y, ptEnd.Y);
+                    var minX = Math.Min(ptStart.X, ptEnd.X);
+                    var minY = Math.Min(ptStart.Y, ptEnd.Y);
+                    var pt1 = new Point3d(minX, minY, 0);
+                    var pt2 = new Point3d(maxX, minY, 0);
+                    var pt3 = new Point3d(maxX, maxY, 0);
+                    var pt4 = new Point3d(minX, maxY, 0);
+
+                    List<Point3d> pts = new List<Point3d>()
+                    {
+                        pt1, pt2,pt3,pt4
+                    };
+
+                    Database db = HostApplicationServices.WorkingDatabase;
+
+                    db.AddNewPolyLine(pts);
+
+                }
+            }
+        }
+
+
+        [CommandMethod("DRP")]
+        public void DrawRegularPolygon()
+        {
+
+            Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+            var ppr = ed.GetPoint("\n指定圆心");
+            if (ppr.Status == PromptStatus.OK)
+            {
+                var ptCen = ppr.Value;
+                ppr = ed.GetPoint("\n指定角点");
+                if (ppr.Status == PromptStatus.OK)
+                {
+                    var pt1 = ppr.Value;
+
+
+                    var distance = pt1.DistanceTo(ptCen);
+                    if (distance == 0) return;
+
+                    var pir = ed.GetInteger("\n指定边数");
+                    if (pir.Status == PromptStatus.OK)
+                    {
+                        int sideNum = pir.Value;
+
+                        if (sideNum < 3) return;
+
+                        var angle = (pt1 - ptCen).GetAngleTo(Vector3d.XAxis);
+
+                        if (pt1.Y < ptCen.Y)
+                            angle = -angle;
+
+                        List<Point3d> pts = new List<Point3d>();
+
+                        for (int i = 0; i < sideNum; i++)
+                        {
+                            var vector = new Vector3d(Math.Cos(angle) * distance, Math.Sin(angle) * distance, 0);
+
+                            var ptNext = ptCen + vector;
+                            pts.Add(ptNext);
+                            angle += Math.PI * 2 / sideNum;
+                        }
+
+                        Database db = HostApplicationServices.WorkingDatabase;
+
+                        db.AddNewPolyLine(pts);
+                    }
+                }
+            }
+
         }
     }
 }
