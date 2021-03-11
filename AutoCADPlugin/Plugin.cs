@@ -3,13 +3,33 @@ using Autodesk.AutoCAD.DatabaseServices;
 using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using Autodesk.AutoCAD.Runtime;
+using DotNetARX;
 using System;
 using System.Collections.Generic;
 
 namespace AutoCADPlugin
 {
-    public class Plugin
+    public partial class Plugin
     {
+        //public void Initialize()
+        //{
+        //    Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+        //    ed.WriteMessage("Hello world!");
+        //}
+
+        //public void Terminate()
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
+        [CommandMethod("AutoLoad")]
+        public void AutoLoad()
+        {
+            Load.AutoLoad("MyProgram", "CAD Plugin", @"G:\autocad\work\autocad plugin\autocad plugin\bin\Debug\autocad plugin.dll");
+        }
+
+
         [CommandMethod("Hello")]
         public void HelloWorld()
         {
@@ -160,6 +180,10 @@ namespace AutoCADPlugin
         [CommandMethod("DREC")]
         public void DrawRectangle()
         {
+            Circle c = new Circle();
+            c.CreateCircle(new Point3d(), new Point3d());
+
+
             Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
             PromptPointOptions ppo = new PromptPointOptions("\n指定起点");
             PromptPointResult ppr = ed.GetPoint(ppo);
@@ -182,7 +206,7 @@ namespace AutoCADPlugin
 
                     List<Point3d> pts = new List<Point3d>()
                     {
-                        pt1, pt2,pt3,pt4
+                        pt1, pt2, pt3, pt4
                     };
 
                     Database db = HostApplicationServices.WorkingDatabase;
@@ -207,7 +231,6 @@ namespace AutoCADPlugin
                 if (ppr.Status == PromptStatus.OK)
                 {
                     var pt1 = ppr.Value;
-
 
                     var distance = pt1.DistanceTo(ptCen);
                     if (distance == 0) return;
