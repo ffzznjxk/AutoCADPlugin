@@ -6,30 +6,44 @@ using Autodesk.AutoCAD.Runtime;
 using DotNetARX;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AutoCADPlugin
 {
-    public partial class Plugin
+    /// <summary>
+    /// 测试插件
+    /// </summary>
+    public partial class Plugin : IExtensionApplication
     {
-        //public void Initialize()
-        //{
-        //    Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
-        //    ed.WriteMessage("Hello world!");
-        //}
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public void Initialize()
+        {
+            //Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
+            //ed.WriteMessage("Hello world!");
+        }
 
-        //public void Terminate()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        /// <summary>
+        /// 释放
+        /// </summary>
+        public void Terminate()
+        {
 
+        }
 
+        /// <summary>
+        /// 自动加载
+        /// </summary>
         [CommandMethod("AutoLoad")]
         public void AutoLoad()
         {
             Load.AutoLoad("MyProgram", "CAD Plugin", @"G:\autocad\work\autocad plugin\autocad plugin\bin\Debug\autocad plugin.dll");
         }
 
-
+        /// <summary>
+        /// 欢迎
+        /// </summary>
         [CommandMethod("Hello")]
         public void HelloWorld()
         {
@@ -51,10 +65,18 @@ namespace AutoCADPlugin
             var pt4 = new Point3d(300, 200, 0);
             Line l2 = new Line(pt3, pt4);
             Database db = HostApplicationServices.WorkingDatabase;
-            var ids = EntityTools.AddNewEntity(db, l, l2);
+
+            using (var tr = db.TransactionManager.StartTransaction())
+            {
+                db.AddToCurrentSpace(l, l2);
+                tr.Commit();
+            }
+
         }
 
-
+        /// <summary>
+        /// 提示画线
+        /// </summary>
         [CommandMethod("PDL")]
         public void PromptDrawLine()
         {
@@ -72,11 +94,20 @@ namespace AutoCADPlugin
                     Line line = new Line(ptStart, ptEnd);
 
                     Database db = HostApplicationServices.WorkingDatabase;
-                    var id = EntityTools.AddNewEntity(db, line);
+
+                    using (var tr = db.TransactionManager.StartTransaction())
+                    {
+                        db.AddToCurrentSpace(line);
+                        tr.Commit();
+                    }
+
                 }
             }
         }
 
+        /// <summary>
+        /// 画多条线段
+        /// </summary>
         [CommandMethod("PDML")]
         public void PromptDrawMultLine()
         {
@@ -96,7 +127,12 @@ namespace AutoCADPlugin
                     Line line = new Line(ptStart, ptEnd);
 
                     Database db = HostApplicationServices.WorkingDatabase;
-                    var id = EntityTools.AddNewEntity(db, line);
+
+                    using (var tr = db.TransactionManager.StartTransaction())
+                    {
+                        db.AddToCurrentSpace(line);
+                        tr.Commit();
+                    }
 
                     ptStart = ptEnd;
                     ppo = new PromptPointOptions("\n指定下一点");
@@ -105,6 +141,9 @@ namespace AutoCADPlugin
             }
         }
 
+        /// <summary>
+        /// 画多线段
+        /// </summary>
         [CommandMethod("PDPL")]
         public void PromptDrawPolyLine()
         {
@@ -122,16 +161,25 @@ namespace AutoCADPlugin
             }
             if (pts.Count > 1)
             {
-
                 Database db = HostApplicationServices.WorkingDatabase;
-                db.AddNewPolyLine(pts);
+                Polyline pl = new Polyline();
+                var pts2d = pts.Select(d => new Point2d(d.X, d.Y)).ToArray();
+                pl.CreatePolyline(pts2d);
+                pl.Closed = true;
+                using (var tr = db.TransactionManager.StartTransaction())
+                {
+                    db.AddToCurrentSpace(pl);
+                    tr.Commit();
+                }
+
             }
             else
-            {
                 ed.WriteMessage("\n输入点过少。");
-            }
         }
 
+        /// <summary>
+        /// 画平行四边形
+        /// </summary>
         [CommandMethod("DPL")]
         public void DrawParallelogram()
         {
@@ -155,7 +203,6 @@ namespace AutoCADPlugin
                     {
                         var ent = (Entity)id.GetObject(OpenMode.ForRead);
                         Line line = (Line)ent;
-                        //var vector = line.EndPoint - line.StartPoint;
                         var vector = line.Delta;
 
                         var pt4 = pt3 - vector;
@@ -165,7 +212,12 @@ namespace AutoCADPlugin
                             line.StartPoint, line.EndPoint, pt3, pt4
                         };
 
-                        db.AddNewPolyLine(pts);
+                        Polyline pl = new Polyline();
+                        var pts2d = pts.Select(d => new Point2d(d.X, d.Y)).ToArray();
+
+                        pl.CreatePolyline(pts2d);
+                        pl.Closed = true;
+                        db.AddToCurrentSpace(pl);
 
                         line.UpgradeOpen();
                         line.Erase();
@@ -177,12 +229,14 @@ namespace AutoCADPlugin
             }
         }
 
+        /// <summary>
+        /// 绘制矩形
+        /// </summary>
         [CommandMethod("DREC")]
         public void DrawRectangle()
         {
             Circle c = new Circle();
             c.CreateCircle(new Point3d(), new Point3d());
-
 
             Editor ed = Application.DocumentManager.MdiActiveDocument.Editor;
             PromptPointOptions ppo = new PromptPointOptions("\n指定起点");
@@ -199,25 +253,34 @@ namespace AutoCADPlugin
                     var maxY = Math.Max(ptStart.Y, ptEnd.Y);
                     var minX = Math.Min(ptStart.X, ptEnd.X);
                     var minY = Math.Min(ptStart.Y, ptEnd.Y);
-                    var pt1 = new Point3d(minX, minY, 0);
-                    var pt2 = new Point3d(maxX, minY, 0);
-                    var pt3 = new Point3d(maxX, maxY, 0);
-                    var pt4 = new Point3d(minX, maxY, 0);
+                    var pt1 = new Point2d(minX, minY);
+                    var pt2 = new Point2d(maxX, minY);
+                    var pt3 = new Point2d(maxX, maxY);
+                    var pt4 = new Point2d(minX, maxY);
 
-                    List<Point3d> pts = new List<Point3d>()
+                    List<Point2d> pts = new List<Point2d>()
                     {
                         pt1, pt2, pt3, pt4
                     };
 
                     Database db = HostApplicationServices.WorkingDatabase;
 
-                    db.AddNewPolyLine(pts);
+                    using (var tr = db.TransactionManager.StartTransaction())
+                    {
+                        var pl = new Polyline();
+                        pl.CreatePolyline(pts.ToArray());
+                        pl.Closed = true;
+                        db.AddToCurrentSpace(pl);
+                        tr.Commit();
+                    }
 
                 }
             }
         }
 
-
+        /// <summary>
+        /// 绘制正多边形
+        /// </summary>
         [CommandMethod("DRP")]
         public void DrawRegularPolygon()
         {
@@ -247,24 +310,28 @@ namespace AutoCADPlugin
                         if (pt1.Y < ptCen.Y)
                             angle = -angle;
 
-                        List<Point3d> pts = new List<Point3d>();
+                        List<Point2d> pts = new List<Point2d>();
 
                         for (int i = 0; i < sideNum; i++)
                         {
-                            var vector = new Vector3d(Math.Cos(angle) * distance, Math.Sin(angle) * distance, 0);
-
-                            var ptNext = ptCen + vector;
-                            pts.Add(ptNext);
+                            var vector = new Vector2d(Math.Cos(angle), Math.Sin(angle)) * distance;
+                            pts.Add(new Point2d(ptCen.X, ptCen.Y) + vector);
                             angle += Math.PI * 2 / sideNum;
                         }
 
                         Database db = HostApplicationServices.WorkingDatabase;
 
-                        db.AddNewPolyLine(pts);
+                        Polyline pl = new Polyline();
+                        pl.CreatePolyline(pts.ToArray());
+                        pl.Closed = true;
+                        using (var tr = db.TransactionManager.StartTransaction())
+                        {
+                            db.AddToCurrentSpace(pl);
+                            tr.Commit();
+                        }
                     }
                 }
             }
-
         }
     }
 }

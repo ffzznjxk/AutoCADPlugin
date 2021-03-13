@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\AutoCADPlugin.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -75,11 +76,8 @@
     </Compile>
     <Compile Include="GeoTest.cs" />
     <Compile Include="Load.cs" />
-    <Compile Include="EntityTools.cs" />
-    <Compile Include="MyRibbon.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RibbonTools.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="UsingDNA.cs" />
   </ItemGroup>

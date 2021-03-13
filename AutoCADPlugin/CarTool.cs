@@ -15,6 +15,9 @@ namespace AutoCADPlugin
 {
     public partial class CarTool : Form
     {
+        /// <summary>
+        /// 车位工具
+        /// </summary>
         public CarTool()
         {
             InitializeComponent();
@@ -22,6 +25,7 @@ namespace AutoCADPlugin
             comboBoxOrderType.DataSource = new List<string> { "从上往下", "从下往上" };
         }
 
+        //添加车位图块
         private void buttonAddCar_Click(object sender, EventArgs e)
         {
             Hide();
@@ -30,12 +34,14 @@ namespace AutoCADPlugin
             AddCarBlock(filePath, comboBoxCarType.Text, angle);
         }
 
+        //添加索引
         private void buttonAddIndex_Click(object sender, EventArgs e)
         {
             Hide();
             OrderCarBlock(comboBoxOrderType.Text == "从上往下");
         }
 
+        //统计表格
         private void buttonSummaryCar_Click(object sender, EventArgs e)
         {
             Hide();

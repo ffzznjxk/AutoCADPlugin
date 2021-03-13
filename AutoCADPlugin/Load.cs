@@ -10,8 +10,17 @@ using RegistryKey = Microsoft.Win32.RegistryKey;
 
 namespace AutoCADPlugin
 {
+    /// <summary>
+    /// 程序加载
+    /// </summary>
     public class Load
     {
+        /// <summary>
+        /// 自动加载
+        /// </summary>
+        /// <param name="dname">程序名称</param>
+        /// <param name="desc">描述</param>
+        /// <param name="dpath">路径</param>
         public static void AutoLoad(string dname, string desc, string dpath)
         {
             //
