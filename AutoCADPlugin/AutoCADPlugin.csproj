@@ -52,9 +52,15 @@
       <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AcWindows.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="AdWindows">
+      <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AdWindows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DNA">
       <HintPath>..\..\XYSoftware\DNA\DNA\bin\Debug\DNA.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -65,26 +71,60 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Args.cs" />
-    <Compile Include="CarTool.cs">
+    <Compile Include="Common\Args.cs" />
+    <Compile Include="Common\Command\PaletteInfomation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Command\PaletteInfomation.Designer.cs">
+      <DependentUpon>PaletteInfomation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InfomationTools\CarTool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CarTool.Designer.cs">
+    <Compile Include="InfomationTools\CarTool.Designer.cs">
       <DependentUpon>CarTool.cs</DependentUpon>
     </Compile>
-    <Compile Include="GeoTest.cs" />
-    <Compile Include="Load.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="Common\Command\GeometricCalculation.cs" />
+    <Compile Include="Common\Command\Command.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools.cs" />
-    <Compile Include="UsingDNA.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Ribbon\Ribbon.cs" />
+    <Compile Include="Ribbon\RibbonCommandHandler.cs" />
+    <Compile Include="Common\Tools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="CarTool.resx">
+    <EmbeddedResource Include="Common\Command\PaletteInfomation.resx">
+      <DependentUpon>PaletteInfomation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="InfomationTools\CarTool.resx">
       <DependentUpon>CarTool.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddCar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddCarToolTip.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GraphicsTools\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CreateTable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\OrderCar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

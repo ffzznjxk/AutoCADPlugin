@@ -12,7 +12,7 @@ namespace AutoCADPlugin
     /// <summary>
     /// 集合测试
     /// </summary>
-    public class GeoTest
+    public class GeometricCalculation
     {
         /// <summary>
         /// 绘制箭头

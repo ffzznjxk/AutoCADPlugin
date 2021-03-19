@@ -1,0 +1,11 @@
+.vs/
+**/bin/
+**/obj/
+**/XYSoftware.bundle/
+
+*.nupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+/UpgradeLog.htm

@@ -3,8 +3,12 @@ using Autodesk.AutoCAD.EditorInput;
 using Autodesk.AutoCAD.Geometry;
 using DotNetARX;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Windows.Media.Imaging;
 using static AutoCADPlugin.Args;
 
 using AcadApp = Autodesk.AutoCAD.ApplicationServices.Application;
@@ -36,15 +40,11 @@ namespace AutoCADPlugin
             using (var tr = db.TransactionManager.StartTransaction())
             {
                 bool success = db.ImportBlockFromDwg(filePath, carBlockName, DuplicateRecordCloning.Replace);
-                if (success)
-                {
-                    //设置图层
-                    db.AddLayer(carLayer, "车位图层");
-                    db.SetLayerColor(carLayer, carColorIndex);
-                    tr.Commit();
-                }
-                else
-                    return;
+                if (!success) return;
+                //设置图层
+                db.AddLayer(carLayer, "车位图层");
+                db.SetLayerColor(carLayer, carColorIndex);
+                tr.Commit();
             }
 
             Editor ed = AcadApp.DocumentManager.MdiActiveDocument.Editor;
@@ -234,6 +234,36 @@ namespace AutoCADPlugin
                     AcadApp.ShowAlertDialog("选中数量为0");
                 tr.Commit();
             }
+        }
+
+        /// <summary>
+        /// 将Bitmap图片转换为BitmapImage
+        /// </summary>
+        /// <param name="image"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public static BitmapImage GetBitmapImage(this Bitmap image, int size = 0)
+        {
+            BitmapImage bmp = new BitmapImage();
+            MemoryStream stream = new MemoryStream();
+            if (size > 0)
+            {
+                using (var newImage = new Bitmap(size, size))
+                using (var graphics = Graphics.FromImage(newImage))
+                {
+                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                    graphics.DrawImage(image, new Rectangle(0, 0, size, size));
+                    newImage.Save(stream, ImageFormat.Png);
+                }
+            }
+            else
+                image.Save(stream, ImageFormat.Png);
+            bmp.BeginInit();
+            bmp.StreamSource = stream;
+            bmp.EndInit();
+            return bmp;
         }
     }
 }
