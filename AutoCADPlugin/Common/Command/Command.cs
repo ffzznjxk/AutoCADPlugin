@@ -629,10 +629,12 @@ namespace AutoCADPlugin
                 {
                     Visible = true,
                     Dock = DockSides.Left,
-                    MinimumSize = new Size(360, 400)
+                    MinimumSize = new Size(200, 500)
                 };
 
-                var dicCmds = new Dictionary<Bitmap, List<string>>
+                var dicCmds = new Dictionary<string, Dictionary<Bitmap, List<string>>>();
+
+                var dicInfos = new Dictionary<Bitmap, List<string>>
                 {
                     { Properties.Resources.AddCar,
                         new List<string> { "添加车位", "AddCar"}},
@@ -641,8 +643,9 @@ namespace AutoCADPlugin
                     { Properties.Resources.CreateTable,
                         new List<string> { "统计车位", "CreateTable"}},
                 };
-                psMyTool.Add("信息类", new PaletteInfomation(dicCmds));
-                psMyTool.Add("图形类", new PaletteInfomation(dicCmds));
+                dicCmds.Add("信息类", dicInfos);
+                foreach (var cmds in dicCmds)
+                    psMyTool.Add(cmds.Key, new PaletteInfomation(cmds.Value));
             }
             else
                 psMyTool.Visible = !psMyTool.Visible;

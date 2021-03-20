@@ -28,6 +28,11 @@ namespace AutoCADPlugin
 
         private void PaletteInfomation_Load(object sender, EventArgs e)
         {
+            AddControls();
+        }
+
+        private void AddControls()
+        {
             for (int i = 0; i < dicCmds.Count; i++)
             {
                 var cmd = dicCmds.ElementAt(i);
@@ -37,20 +42,25 @@ namespace AutoCADPlugin
                     Size = new Size(32, 32),
                     Image = cmd.Key,
                     SizeMode = PictureBoxSizeMode.StretchImage,
-                    Location = new Point(4, i * 36 + 4),
+                    Location = new Point(0, i * 32 + 4),
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
                 };
                 Button bn = new Button
                 {
                     Text = cmd.Value[0],
-                    Size = new Size(100, 32),
-                    Location = new Point(40, i * 36 + 4),
+                    Size = new Size(88 + Size.Width - 200, 32),
+                    Location = new Point(32, i * 32 + 4),
                     Tag = cmd.Value[1],
+                    Anchor = AnchorStyles.Right | AnchorStyles.Left | AnchorStyles.Top,
                 };
                 bn.Click += Bn_Click;
-                Label lb = new Label
+                TextBox lb = new TextBox
                 {
-                    Location = new Point(150, i * 36 + 14),
+                    Location = new Point(120 + Size.Width - 200, i * 32 + 9),
                     Text = cmd.Value[1],
+                    Anchor = AnchorStyles.Right | AnchorStyles.Top,
+                    Size = new Size(80, 23),
+                    ReadOnly = true,
                 };
 
                 Controls.Add(pb);
