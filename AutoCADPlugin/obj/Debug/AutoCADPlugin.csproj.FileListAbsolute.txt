@@ -19,3 +19,4 @@ F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.Properties.Resources.
 F:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.xml
 F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.PaletteInfomation.resources
 F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csprojAssemblyReference.cache
+F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.PaletteCmds.resources

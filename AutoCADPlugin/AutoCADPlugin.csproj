@@ -75,6 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\Args.cs" />
+    <Compile Include="Common\Command\PaletteCmds.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Command\PaletteCmds.Designer.cs">
+      <DependentUpon>PaletteCmds.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Command\PaletteInfomation.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -100,6 +106,9 @@
     <Compile Include="Common\Tools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Common\Command\PaletteCmds.resx">
+      <DependentUpon>PaletteCmds.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Common\Command\PaletteInfomation.resx">
       <DependentUpon>PaletteInfomation.cs</DependentUpon>
     </EmbeddedResource>

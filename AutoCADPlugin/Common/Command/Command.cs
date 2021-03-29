@@ -53,10 +53,6 @@ namespace AutoCADPlugin
 
         #region 相关参数
 
-        /// <summary>
-        /// 命令面板
-        /// </summary>
-        public static PaletteSet psMyTool = null;
 
         #endregion
 
@@ -617,38 +613,138 @@ namespace AutoCADPlugin
             AcadApp.ShowModalDialog(new CarTool());
         }
 
+        public static PaletteSet ps = null;
+
         /// <summary>
         /// 命令面板集
         /// </summary>
         [CommandMethod("Cmds")]
         public void Cmds()
         {
-            if (psMyTool == null)
+            if (ps == null)
             {
-                psMyTool = new PaletteSet("我的工具")
+                ps = new PaletteSet("我的工具");
+                ps.Visible = true;
+                ps.Dock = DockSides.Left;
+                ps.MinimumSize = new Size(200, 500);
+
+                var dicCmds = new Dictionary<string, Dictionary<Bitmap, List<string>>>
                 {
-                    Visible = true,
-                    Dock = DockSides.Left,
-                    MinimumSize = new Size(200, 500)
+                    { "命令集", new Dictionary<Bitmap, List<string>>
+                        {
+                            { Properties.Resources.AddCar, new List<string>{ "添加车位", "AddCar"} },
+                            { Properties.Resources.OrderCar, new List<string>{ "车位排序", "OrderCar"} },
+                            { Properties.Resources.CreateTable, new List<string>{ "统计车位", "CreateTable"} },
+                        }
+                    },
+                    {
+                        "命令集1", new Dictionary<Bitmap, List<string>>
+                        {
+                            { Properties.Resources.AddCar, new List<string>{ "添加车位", "AddCar"} },
+                            { Properties.Resources.OrderCar, new List<string>{ "车位排序", "OrderCar"} },
+                        }
+                    }
                 };
 
-                var dicCmds = new Dictionary<string, Dictionary<Bitmap, List<string>>>();
-
-                var dicInfos = new Dictionary<Bitmap, List<string>>
-                {
-                    { Properties.Resources.AddCar,
-                        new List<string> { "添加车位", "AddCar"}},
-                    { Properties.Resources.OrderCar,
-                        new List<string> { "车位排序", "OrderCar"}},
-                    { Properties.Resources.CreateTable,
-                        new List<string> { "统计车位", "CreateTable"}},
-                };
-                dicCmds.Add("信息类", dicInfos);
-                foreach (var cmds in dicCmds)
-                    psMyTool.Add(cmds.Key, new PaletteInfomation(cmds.Value));
+                foreach (var cmd in dicCmds)
+                    ps.Add(cmd.Key, new PaletteCmds(cmd.Value));
             }
             else
-                psMyTool.Visible = !psMyTool.Visible;
+                ps.Visible = !ps.Visible;
+
+            //PaletteSet psMyTool = null;
+            //if (psMyTool == null)
+            //{
+            //    psMyTool = new PaletteSet("我的工具")
+            //    {
+            //        Visible = true,
+            //        Dock = DockSides.Left,
+            //        MinimumSize = new Size(200, 500)
+            //    };
+
+            //    var dicCmds = new Dictionary<string, Dictionary<Bitmap, List<string>>>();
+
+            //    var dicInfos = new Dictionary<Bitmap, List<string>>
+            //    {
+            //        { Properties.Resources.AddCar,
+            //            new List<string> { "添加车位", "AddCar"}},
+            //        { Properties.Resources.OrderCar,
+            //            new List<string> { "车位排序", "OrderCar"}},
+            //        { Properties.Resources.CreateTable,
+            //            new List<string> { "统计车位", "CreateTable"}},
+            //    };
+            //    dicCmds.Add("信息类", dicInfos);
+            //    foreach (var cmds in dicCmds)
+            //        psMyTool.Add(cmds.Key, new PaletteInfomation(cmds.Value));
+            //}
+            //else
+            //    psMyTool.Visible = !psMyTool.Visible;
+        }
+
+        /// <summary>
+        /// 添加网格
+        /// </summary>
+        [CommandMethod("CarGird")]
+        public void CarGird()
+        {
+            var pl = DrawRandomQuadrilateral();
+            if (pl != null)
+            {
+                var ls3ds = new List<LineSegment3d>();
+                for (int i = 0; i < pl.NumberOfVertices; i++)
+                    ls3ds.Add(pl.GetLineSegmentAt(i));
+                ls3ds = ls3ds.OrderBy(d => d.MidPoint.Y).ToList();
+                double length = 100;
+                var pt1 = Point2d.Origin;
+                var pt3 = (pt1 + Vector2d.XAxis - Vector2d.YAxis) * length;
+                Polyline grid = new Polyline();
+                grid.CreateRectangle(pt1, pt3);
+
+                var ls3d = ls3ds.FirstOrDefault();
+
+                var pts = new List<Point3d> { ls3d.StartPoint, ls3d.EndPoint };
+                var pt = new Point3d(pts.Min(d => d.X), pts.Min(d => d.Y), 0);
+
+                var l3d = new Line3d(pt, Vector3d.XAxis);
+                var pl3d = pl.GetGeCurve();
+
+                //var inter = pl3d.();
+            }
+        }
+
+        private static Polyline DrawRandomQuadrilateral()
+        {
+            Editor ed = AcadApp.DocumentManager.MdiActiveDocument.Editor;
+
+            var ppr = ed.GetPoint(new PromptPointOptions("\n指定点"));
+            if (ppr.Status == PromptStatus.OK)
+            {
+                var startPt = ppr.Value;
+
+                ppr = ed.GetPoint(new PromptPointOptions("\n指定点"));
+                if (ppr.Status == PromptStatus.OK)
+                {
+                    var endPt = ppr.Value;
+
+                    //var ls3d = new LineSegment3d(startPt, endPt);
+
+                    Random rd = new Random();
+
+                    var v1 = startPt.GetVectorTo(endPt).OrthoProjectTo(Vector3d.YAxis);
+
+                    var value1 = Convert.ToDouble(rd.Next(100));
+                    var value2 = Convert.ToDouble(rd.Next(100));
+
+                    var pt2 = startPt + v1 * ( 1 + value1 / 100);
+                    var pt4 = endPt - v1 * value2 / 100;
+
+                    Polyline pl = new Polyline();
+                    pl.CreatePolyline(new Point3dCollection { startPt, pt2, endPt, pt4 });
+                    pl.Closed = true;
+                    return pl;
+                }
+            }
+            return null;
         }
 
         #endregion
