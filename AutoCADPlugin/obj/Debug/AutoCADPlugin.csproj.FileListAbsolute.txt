@@ -19,3 +19,17 @@ F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.Properties.Resources.
 F:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.xml
 F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.PaletteInfomation.resources
 F:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.PaletteCmds.resources
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.PaletteCmds.resources
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.PaletteInfomation.resources
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.CarTool.resources
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.Properties.Resources.resources
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csproj.GenerateResource.cache
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csproj.CoreCompileInputs.cache
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.dll
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.pdb
+D:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.xml
+D:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.dll
+D:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\AutoCADPlugin.pdb
+D:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\DNA.pdb
+D:\Job\AutoCADPlugin\AutoCADPlugin\bin\Debug\DNA.xml
+D:\Job\AutoCADPlugin\AutoCADPlugin\obj\Debug\AutoCADPlugin.csproj.CopyComplete

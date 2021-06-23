@@ -33,27 +33,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AcCoreMgd">
-      <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AcCoreMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcCui">
-      <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AcCui.dll</HintPath>
+      <HintPath>E:\ObjectARX 2016\inc\AcCoreMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcDbMgd">
-      <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AcDbMgd.dll</HintPath>
+      <HintPath>E:\ObjectARX 2016\inc\AcDbMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AcMgd">
-      <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AcMgd.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="AcWindows">
-      <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AcWindows.dll</HintPath>
+      <HintPath>E:\ObjectARX 2016\inc\AcMgd.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="AdWindows">
-      <HintPath>E:\ObjectARX\ObjectARX 2016\inc\AdWindows.dll</HintPath>
+      <HintPath>E:\ObjectARX 2016\inc\AdWindows.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="DNA">
@@ -76,9 +68,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\XYSoftware\DNA\DNA\BlockTools.cs">
-      <Link>BlockTools.cs</Link>
-    </Compile>
     <Compile Include="Common\Args.cs" />
     <Compile Include="Common\Command\PaletteCmds.cs">
       <SubType>UserControl</SubType>
